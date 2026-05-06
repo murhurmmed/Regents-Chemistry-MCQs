@@ -1,669 +1,470 @@
-<!--
-NY Regents Chemistry Practice
-Large-Scale Version
-Features:
-- 500+ Regents-style questions
-- 60 question max
-- No repeated questions during session
-- Topic filtering
-- Study mode
-- Green & white minimalistic UI
-- Explanations for every answer
-
-HOW TO USE:
-1. Save as chemistry.html
-2. Open in browser
--->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NY Regents Chemistry Practice</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
+  :root {
+    --bg: #f4fff7;
+    --surface: #ffffff;
+    --surface2: #ecfdf3;
+    --border: #ccebd8;
+    --accent: #16a34a;
+    --accent2: #22c55e;
+    --green: #15803d;
+    --red: #dc2626;
+    --amber: #d97706;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --white: #ffffff;
+  }
 
-:root{
---green:#16a34a;
---green2:#22c55e;
---light:#f0fdf4;
---border:#dcfce7;
---text:#14532d;
---muted:#6b7280;
---white:#ffffff;
---red:#ef4444;
-}
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-body{
-font-family:'Inter',sans-serif;
-background:linear-gradient(to bottom right,#f0fdf4,#ffffff);
-min-height:100vh;
-color:var(--text);
-}
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    right: -200px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-.container{
-max-width:1000px;
-margin:auto;
-padding:40px 20px;
-}
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    left: -150px;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(22,163,74,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-.hero{
-text-align:center;
-margin-bottom:40px;
-}
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
 
-.hero h1{
-font-size:52px;
-font-weight:800;
-color:var(--green);
-}
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
 
-.hero p{
-margin-top:12px;
-color:var(--muted);
-font-size:17px;
-}
+  .header-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
 
-.card{
-background:white;
-border:1px solid var(--border);
-border-radius:24px;
-padding:30px;
-margin-bottom:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.04);
-}
+  .header h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
 
-.section-title{
-font-size:24px;
-font-weight:700;
-margin-bottom:20px;
-color:var(--green);
-}
+  .header h1 span {
+    color: var(--accent);
+  }
 
-.topic-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:12px;
-}
+  .header p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 400;
+  }
 
-.topic-btn{
-padding:14px;
-border:none;
-border-radius:14px;
-background:#ecfdf5;
-color:var(--green);
-font-weight:600;
-cursor:pointer;
-transition:.2s;
-}
+  .setup-card,
+  .question-card,
+  .results-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+  }
 
-.topic-btn:hover{
-background:var(--green);
-color:white;
-}
+  .setup-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
 
-.study-box{
-margin-top:20px;
-padding:20px;
-background:#f9fffb;
-border:1px solid var(--border);
-border-radius:16px;
-line-height:1.7;
-display:none;
-}
+  .setup-card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
 
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:20px;
-align-items:center;
-}
+  .num-label {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--accent);
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
 
-input{
-padding:14px;
-border-radius:12px;
-border:1px solid var(--border);
-font-size:16px;
-width:220px;
-}
+  .num-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
 
-.main-btn{
-background:linear-gradient(to right,var(--green),var(--green2));
-border:none;
-color:white;
-padding:14px 24px;
-border-radius:14px;
-font-weight:700;
-cursor:pointer;
-}
+  .num-btn,
+  .topic-chip,
+  .choice-btn,
+  .next-btn {
+    transition: all 0.2s ease;
+  }
 
-.main-btn:hover{
-opacity:.9;
-}
+  .num-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    padding: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+  }
 
-#quizScreen,
-#resultsScreen{
-display:none;
-}
+  .num-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 
-.progress{
-margin-bottom:20px;
-font-weight:600;
-color:var(--muted);
-}
+  .num-btn.selected {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
 
-.question{
-font-size:26px;
-font-weight:700;
-margin-bottom:25px;
-line-height:1.5;
-}
+  .custom-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
 
-.choice{
-width:100%;
-padding:16px;
-margin-bottom:14px;
-border:none;
-border-radius:14px;
-background:#f0fdf4;
-border:1px solid var(--border);
-cursor:pointer;
-font-size:16px;
-text-align:left;
-transition:.2s;
-}
+  .custom-row input {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    width: 120px;
+    font-size: 15px;
+    outline: none;
+  }
 
-.choice:hover{
-background:#dcfce7;
-}
+  .custom-row input:focus {
+    border-color: var(--accent);
+  }
 
-.correct{
-background:#22c55e !important;
-color:white;
-}
+  .custom-row label {
+    color: var(--muted);
+    font-size: 13px;
+  }
 
-.wrong{
-background:#ef4444 !important;
-color:white;
-}
+  .topic-section {
+    margin-bottom: 32px;
+  }
 
-.feedback{
-display:none;
-margin-top:20px;
-padding:20px;
-border-radius:16px;
-line-height:1.7;
-}
+  .topic-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 
-.good{
-background:#ecfdf5;
-border:1px solid #bbf7d0;
-}
+  .topic-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+  }
 
-.bad{
-background:#fef2f2;
-border:1px solid #fecaca;
-}
+  .topic-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 
-.big-score{
-font-size:72px;
-font-weight:800;
-color:var(--green);
-margin:20px 0;
-text-align:center;
-}
+  .topic-chip.active {
+    background: rgba(34,197,94,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 
-.center{
-text-align:center;
-}
+  .start-btn,
+  .restart-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 16px;
+    color: white;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
 
+  .start-btn:hover,
+  .restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(34,197,94,0.25);
+  }
+
+  .quiz-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+
+  .q-counter {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .q-counter span {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .score-badge {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  .score-badge strong {
+    color: var(--green);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: #dcfce7;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.3s ease;
+  }
+
+  .topic-tag {
+    display: inline-block;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.2);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .choice-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(34,197,94,0.08);
+  }
+
+  .choice-letter {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .choice-btn.correct {
+    border-color: var(--green);
+    background: rgba(34,197,94,0.12);
+  }
+
+  .choice-btn.wrong {
+    border-color: var(--red);
+    background: rgba(220,38,38,0.08);
+  }
+
+  .feedback {
+    display: none;
+    margin-top: 20px;
+    padding: 24px;
+    border-radius: 18px;
+  }
+
+  .feedback.show {
+    display: block;
+  }
+
+  .correct-fb {
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+  }
+
+  .wrong-fb {
+    background: rgba(220,38,38,0.06);
+    border: 1px solid rgba(220,38,38,0.18);
+  }
+
+  .feedback-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .correct-answer-line {
+    margin-bottom: 10px;
+    color: var(--green);
+    font-size: 13px;
+  }
+
+  .explanation {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .next-btn {
+    width: 100%;
+    margin-top: 20px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .next-btn:hover {
+    border-color: var(--accent);
+    background: rgba(34,197,94,0.05);
+  }
+
+  .results-card {
+    text-align: center;
+  }
+
+  .results-emoji {
+    font-size: 60px;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .score-big {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--accent);
+    margin: 18px 0 10px;
+  }
+
+  .score-label {
+    color: var(--muted);
+    margin-bottom: 30px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  .stat-box {
+    background: var(--surface2);
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .stat-num {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .muted { color: var(--text); }
+
+  @media (max-width: 700px) {
+    .setup-card,
+    .question-card,
+    .results-card {
+      padding: 24px;
+    }
+
+    .stats-row {
+      grid-template-columns: 1fr;
+    }
+
+    .custom-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 </style>
-</head>
-<body>
-
-<div class="container">
-
-<div id="homeScreen">
-
-<div class="hero">
-<h1>NY Regents Chemistry</h1>
-<p>500+ randomized Regents chemistry questions</p>
-</div>
-
-<div class="card">
-
-<div class="section-title">Study Topics</div>
-
-<div class="topic-grid">
-
-<button class="topic-btn" onclick="showStudy('matter')">Matter</button>
-<button class="topic-btn" onclick="showStudy('atomic')">Atomic Theory</button>
-<button class="topic-btn" onclick="showStudy('periodic')">Periodic Table</button>
-<button class="topic-btn" onclick="showStudy('bonding')">Bonding</button>
-<button class="topic-btn" onclick="showStudy('moles')">Stoichiometry</button>
-<button class="topic-btn" onclick="showStudy('acids')">Acids & Bases</button>
-<button class="topic-btn" onclick="showStudy('redox')">Redox</button>
-<button class="topic-btn" onclick="showStudy('nuclear')">Nuclear</button>
-<button class="topic-btn" onclick="showStudy('organic')">Organic</button>
-<button class="topic-btn" onclick="showStudy('gases')">Gas Laws</button>
-
-</div>
-
-<div class="study-box" id="studyBox"></div>
-
-</div>
-
-<div class="card">
-
-<div class="section-title">Start Quiz</div>
-
-<div class="controls">
-
-<input type="number"
-id="questionCount"
-placeholder="Max 60 Questions"
-value="25"
-min="1"
-max="60">
-
-<button class="main-btn" onclick="startQuiz()">
-Start Practice
-</button>
-
-</div>
-
-<p style="margin-top:16px;color:var(--muted);">
-Maximum of 60 questions per session. Questions never repeat in the same session.
-</p>
-
-</div>
-
-</div>
-
-<div id="quizScreen">
-
-<div class="card">
-
-<div class="progress">
-Question <span id="currentNum">1</span> /
-<span id="totalNum">25</span>
-</div>
-
-<div class="question" id="questionText"></div>
-
-<div id="choices"></div>
-
-<div class="feedback" id="feedback"></div>
-
-<button class="main-btn"
-id="nextBtn"
-style="display:none;margin-top:20px;"
-onclick="nextQuestion()">
-Next Question
-</button>
-
-</div>
-
-</div>
-
-<div id="resultsScreen" class="card center">
-
-<h2 style="font-size:42px;color:var(--green);">
-Quiz Complete
-</h2>
-
-<div class="big-score" id="scorePercent">
-0%
-</div>
-
-<p id="scoreText"></p>
-
-<button class="main-btn"
-style="margin-top:25px;"
-onclick="location.reload()">
-Restart
-</button>
-
-</div>
-
-</div>
-
-<script>
-
-/* =====================================================
-STUDY NOTES
-===================================================== */
-
-const notes = {
-
-matter:"Matter includes elements, compounds, mixtures, physical properties, and chemical properties.",
-
-atomic:"Study protons, neutrons, electrons, isotopes, and electron configuration.",
-
-periodic:"Know periodic trends like electronegativity, atomic radius, and ionization energy.",
-
-bonding:"Learn ionic, covalent, metallic bonding, and intermolecular forces.",
-
-moles:"Practice mole conversions, molar mass, and stoichiometry.",
-
-acids:"Know pH, neutralization, titrations, and acid/base definitions.",
-
-redox:"Oxidation is loss, reduction is gain. Study oxidation numbers.",
-
-nuclear:"Learn alpha, beta, gamma decay, fission, fusion, and half-life.",
-
-organic:"Study hydrocarbons, polymers, functional groups, and isomers.",
-
-gases:"Learn Boyle’s Law, Charles’s Law, Combined Gas Law, and STP."
-
-};
-
-function showStudy(topic){
-
-const box=document.getElementById("studyBox");
-
-box.style.display="block";
-
-box.innerHTML=notes[topic];
-
-}
-
-/* =====================================================
-500+ QUESTIONS
-===================================================== */
-
-const baseQuestions = [
-
-{
-q:"Which particle has a positive charge?",
-choices:["Electron","Proton","Neutron","Photon"],
-correct:1,
-exp:"Protons are positively charged particles located in the nucleus."
-},
-
-{
-q:"Which type of bond involves the transfer of electrons?",
-choices:["Covalent","Hydrogen","Ionic","Metallic"],
-correct:2,
-exp:"Ionic bonding occurs when electrons transfer between atoms."
-},
-
-{
-q:"What is the pH of a neutral solution?",
-choices:["0","7","14","1"],
-correct:1,
-exp:"A neutral solution has a pH of 7."
-},
-
-{
-q:"At STP, one mole of gas occupies:",
-choices:["44.8 L","11.2 L","22.4 L","1.0 L"],
-correct:2,
-exp:"One mole of gas occupies 22.4 liters at STP."
-},
-
-{
-q:"Which radiation has no charge?",
-choices:["Alpha","Beta","Gamma","Positron"],
-correct:2,
-exp:"Gamma radiation has no mass and no charge."
-},
-
-{
-q:"Oxidation is defined as:",
-choices:["Gain of electrons","Loss of electrons","Gain of neutrons","Loss of protons"],
-correct:1,
-exp:"Oxidation means loss of electrons."
-},
-
-{
-q:"Which element is most electronegative?",
-choices:["Na","F","Cl","K"],
-correct:1,
-exp:"Fluorine is the most electronegative element."
-},
-
-{
-q:"What phase change is solid directly to gas?",
-choices:["Melting","Boiling","Condensation","Sublimation"],
-correct:3,
-exp:"Sublimation is solid changing directly into gas."
-}
-
-];
-
-/* =====================================================
-GENERATE 500+ UNIQUE QUESTIONS
-===================================================== */
-
-const ALL_QUESTIONS=[];
-
-const topics=[
-"Matter",
-"Atomic Theory",
-"Periodic Table",
-"Bonding",
-"Stoichiometry",
-"Acids & Bases",
-"Redox",
-"Nuclear",
-"Organic",
-"Gas Laws"
-];
-
-for(let i=0;i<70;i++){
-
-baseQuestions.forEach((q,index)=>{
-
-ALL_QUESTIONS.push({
-
-topic:topics[(i+index)%topics.length],
-
-q:q.q+" ("+(i+1)+")",
-
-choices:[...q.choices],
-
-correct:q.correct,
-
-explanation:q.exp
-
-});
-
-});
-
-}
-
-/* =====================================================
-SHUFFLE
-===================================================== */
-
-function shuffle(arr){
-
-let a=[...arr];
-
-for(let i=a.length-1;i>0;i--){
-
-const j=Math.floor(Math.random()*(i+1));
-
-[a[i],a[j]]=[a[j],a[i]];
-
-}
-
-return a;
-
-}
-
-/* =====================================================
-QUIZ SYSTEM
-===================================================== */
-
-let questions=[];
-let current=0;
-let score=0;
-
-function startQuiz(){
-
-let amount=parseInt(document.getElementById("questionCount").value);
-
-if(amount>60) amount=60;
-
-if(amount<1 || !amount){
-
-alert("Enter a valid amount.");
-
-return;
-
-}
-
-questions=shuffle(ALL_QUESTIONS).slice(0,amount);
-
-current=0;
-score=0;
-
-document.getElementById("homeScreen").style.display="none";
-
-document.getElementById("quizScreen").style.display="block";
-
-document.getElementById("totalNum").textContent=amount;
-
-loadQuestion();
-
-}
-
-function loadQuestion(){
-
-const q=questions[current];
-
-document.getElementById("currentNum").textContent=current+1;
-
-document.getElementById("questionText").textContent=q.q;
-
-const choicesDiv=document.getElementById("choices");
-
-choicesDiv.innerHTML="";
-
-document.getElementById("feedback").style.display="none";
-
-document.getElementById("nextBtn").style.display="none";
-
-q.choices.forEach((choice,index)=>{
-
-const btn=document.createElement("button");
-
-btn.className="choice";
-
-btn.innerHTML=
-"<strong>"+String.fromCharCode(65+index)+".</strong> "+choice;
-
-btn.onclick=()=>answer(index);
-
-choicesDiv.appendChild(btn);
-
-});
-
-}
-
-function answer(index){
-
-const q=questions[current];
-
-const buttons=document.querySelectorAll(".choice");
-
-buttons.forEach(btn=>btn.disabled=true);
-
-const feedback=document.getElementById("feedback");
-
-feedback.style.display="block";
-
-if(index===q.correct){
-
-score++;
-
-buttons[index].classList.add("correct");
-
-feedback.className="feedback good";
-
-feedback.innerHTML=
-`
-<h3>Correct ✅</h3>
-<p>${q.explanation}</p>
-`;
-
-}else{
-
-buttons[index].classList.add("wrong");
-
-buttons[q.correct].classList.add("correct");
-
-feedback.className="feedback bad";
-
-feedback.innerHTML=
-`
-<h3>Incorrect ❌</h3>
-
-<p><strong>Correct Answer:</strong>
-${String.fromCharCode(65+q.correct)}.
-${q.choices[q.correct]}</p>
-
-<p>${q.explanation}</p>
-`;
-
-}
-
-document.getElementById("nextBtn").style.display="inline-block";
-
-}
-
-function nextQuestion(){
-
-current++;
-
-if(current>=questions.length){
-
-finishQuiz();
-
-return;
-
-}
-
-loadQuestion();
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-function finishQuiz(){
-
-document.getElementById("quizScreen").style.display="none";
-
-document.getElementById("resultsScreen").style.display="block";
-
-const percent=Math.round((score/questions.length)*100);
-
-document.getElementById("scorePercent").textContent=
-percent+"%";
-
-document.getElementById("scoreText").innerHTML=
-`
-You got <strong>${score}</strong> out of
-<strong>${questions.length}</strong> correct.
-`;
-
-}
-
-</script>
-
-</body>
-</html>
