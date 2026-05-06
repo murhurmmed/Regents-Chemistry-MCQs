@@ -300,27 +300,35 @@ body{
   <!-- SETUP -->
   <div id="setup-screen" class="card">
 
-    <div class="section-title">Select Number of Questions</div>
+<div class="section-title">Select Number of Questions</div>
 
-    <div class="num-grid">
-      <button class="num-btn selected" onclick="selectNum(5,this)">5</button>
-      <button class="num-btn" onclick="selectNum(10,this)">10</button>
-      <button class="num-btn" onclick="selectNum(15,this)">15</button>
-      <button class="num-btn" onclick="selectNum(20,this)">20</button>
-      <button class="num-btn" onclick="selectNum(25,this)">25</button>
-    </div>
+<div style="margin-bottom:30px;">
 
-    <div class="section-title">Choose Topics</div>
+  <input
+    type="number"
+    id="questionAmount"
+    min="1"
+    max="999"
+    value="10"
+    placeholder="Enter number of questions"
+    style="
+      width:100%;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#f8fffa;
+      font-size:16px;
+      outline:none;
+      color:var(--text);
+      font-weight:600;
+    "
+  >
 
-    <div class="topic-grid" id="topic-grid"></div>
+  <p style="margin-top:10px;color:var(--muted);font-size:14px;">
+    Enter any amount of questions you want
+  </p>
 
-    <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
-
-    <br><br>
-
-    <button class="study-btn" onclick="openStudy()">Study Regents Topics</button>
-
-  </div>
+</div>
 
   <!-- QUIZ -->
   <div id="quiz-screen">
