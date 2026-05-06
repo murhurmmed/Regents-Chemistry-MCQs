@@ -3,216 +3,287 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NYC Regents Chemistry Practice</title>
 
-<title>NYC Chemistry Regents Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --bg:#f5fff8;
+  --card:#ffffff;
+  --green:#22c55e;
+  --green2:#16a34a;
+  --light:#dcfce7;
+  --border:#d1fae5;
+  --text:#14532d;
+  --muted:#4b5563;
+  --wrong:#ef4444;
+}
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 body{
-    background:linear-gradient(to bottom right,#f4fff4,#d8f3dc);
-    min-height:100vh;
-    color:#1b4332;
-    padding:25px;
+  background:linear-gradient(to bottom right,#f0fdf4,#ffffff);
+  font-family:'Inter',sans-serif;
+  color:var(--text);
+  min-height:100vh;
 }
 
 .container{
-    max-width:1100px;
-    margin:auto;
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px 80px;
 }
 
-.screen{
-    background:white;
-    border-radius:24px;
-    padding:35px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
-    margin-bottom:20px;
+.header{
+  text-align:center;
+  margin-bottom:40px;
 }
 
-.hidden{
-    display:none;
+.header small{
+  color:var(--green2);
+  letter-spacing:2px;
+  font-weight:700;
 }
 
-h1{
-    text-align:center;
-    color:#2d6a4f;
-    margin-bottom:10px;
-    font-size:3rem;
+.header h1{
+  font-size:52px;
+  margin-top:10px;
+  line-height:1.1;
 }
 
-.subtitle{
-    text-align:center;
-    color:#40916c;
-    margin-bottom:35px;
-    font-size:1.1rem;
+.header p{
+  margin-top:12px;
+  color:var(--muted);
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:35px;
+  box-shadow:0 10px 30px rgba(34,197,94,0.08);
 }
 
 .section-title{
-    font-size:1.5rem;
-    margin-bottom:15px;
-    color:#2d6a4f;
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:20px;
 }
 
-.topics-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:15px;
-    margin-bottom:30px;
+.num-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+  gap:12px;
+  margin-bottom:30px;
 }
 
-.topic-card{
-    background:#f1fff4;
-    border:2px solid #b7e4c7;
-    padding:20px;
-    border-radius:18px;
-    cursor:pointer;
-    transition:0.25s;
+.num-btn{
+  border:none;
+  background:#f0fdf4;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:700;
+  color:var(--green2);
+  transition:0.2s;
 }
 
-.topic-card:hover{
-    transform:translateY(-4px);
-    background:#d8f3dc;
+.num-btn:hover{
+  transform:translateY(-2px);
+  background:var(--light);
 }
 
-.topic-card.selected{
-    background:#95d5b2;
-    border-color:#2d6a4f;
+.num-btn.selected{
+  background:var(--green);
+  color:white;
 }
 
-.topic-card h3{
-    margin-bottom:10px;
+.topic-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:30px;
 }
 
-label{
-    font-weight:bold;
-    display:block;
-    margin-bottom:10px;
+.topic-chip{
+  border:none;
+  background:#f0fdf4;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:10px 18px;
+  cursor:pointer;
+  color:var(--green2);
+  font-weight:600;
+  transition:0.2s;
 }
 
-input{
-    width:150px;
-    padding:12px;
-    border-radius:12px;
-    border:2px solid #95d5b2;
-    font-size:1rem;
-    margin-bottom:25px;
+.topic-chip.active{
+  background:var(--green);
+  color:white;
 }
 
-button{
-    background:#2d6a4f;
-    color:white;
-    border:none;
-    padding:14px 26px;
-    border-radius:14px;
-    font-size:1rem;
-    cursor:pointer;
-    transition:0.2s;
+.start-btn,
+.next-btn,
+.restart-btn,
+.study-btn{
+  width:100%;
+  border:none;
+  background:linear-gradient(to right,var(--green),var(--green2));
+  color:white;
+  padding:18px;
+  border-radius:18px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-button:hover{
-    background:#1b4332;
-    transform:scale(1.03);
+.start-btn:hover,
+.next-btn:hover,
+.restart-btn:hover,
+.study-btn:hover{
+  transform:translateY(-2px);
 }
 
-.study-section{
-    margin-top:40px;
+#quiz-screen,
+#results-screen,
+#study-screen{
+  display:none;
 }
 
-.study-card{
-    background:#f8fff8;
-    border-left:6px solid #2d6a4f;
-    padding:20px;
-    border-radius:14px;
-    margin-bottom:20px;
-}
-
-.study-card h3{
-    margin-bottom:12px;
-}
-
-.study-card ul{
-    padding-left:20px;
-    line-height:1.7;
+.quiz-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
 }
 
 .progress{
-    width:100%;
-    height:18px;
-    background:#d8f3dc;
-    border-radius:50px;
-    overflow:hidden;
-    margin-bottom:25px;
+  width:100%;
+  height:10px;
+  background:#dcfce7;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:25px;
 }
 
-.progress-bar{
-    height:100%;
-    width:0%;
-    background:#2d6a4f;
-    transition:0.3s;
-}
-
-.question-number{
-    color:#40916c;
-    margin-bottom:15px;
+.progress-fill{
+  height:100%;
+  background:linear-gradient(to right,var(--green),var(--green2));
+  width:0%;
 }
 
 .question{
-    font-size:1.45rem;
-    margin-bottom:25px;
-    line-height:1.5;
+  font-size:24px;
+  font-weight:600;
+  line-height:1.5;
+  margin-bottom:25px;
 }
 
-.option{
-    background:#ecfdf3;
-    border:2px solid #b7e4c7;
-    padding:16px;
-    border-radius:14px;
-    margin-bottom:15px;
-    cursor:pointer;
-    transition:0.2s;
+.choice{
+  width:100%;
+  text-align:left;
+  border:none;
+  margin-bottom:12px;
+  padding:18px;
+  border-radius:16px;
+  background:#f8fffa;
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:0.2s;
+  font-size:15px;
 }
 
-.option:hover{
-    background:#d8f3dc;
+.choice:hover{
+  background:#ecfdf5;
+  transform:translateX(4px);
 }
 
-.correct{
-    background:#95d5b2 !important;
-    border-color:#2d6a4f !important;
+.choice.correct{
+  background:#dcfce7;
+  border:2px solid var(--green);
 }
 
-.wrong{
-    background:#ffd6d6 !important;
-    border-color:#d90429 !important;
+.choice.wrong{
+  background:#fee2e2;
+  border:2px solid var(--wrong);
 }
 
 .feedback{
-    margin-top:20px;
-    padding:20px;
-    border-radius:14px;
-    line-height:1.7;
+  margin-top:20px;
+  padding:22px;
+  border-radius:18px;
+  background:#f0fdf4;
+  border:1px solid var(--border);
+  display:none;
 }
 
-.correct-feedback{
-    background:#d8f3dc;
+.feedback h3{
+  margin-bottom:10px;
 }
 
-.wrong-feedback{
-    background:#ffe5e5;
+.feedback p{
+  line-height:1.7;
+  color:var(--muted);
 }
 
 .score{
-    text-align:center;
-    font-size:2.2rem;
-    margin-bottom:25px;
+  font-size:65px;
+  font-weight:800;
+  color:var(--green2);
+  margin:20px 0;
 }
 
+.results{
+  text-align:center;
+}
+
+.study-topic{
+  margin-bottom:25px;
+  padding:20px;
+  border-radius:18px;
+  background:#f8fffa;
+  border:1px solid var(--border);
+}
+
+.study-topic h3{
+  margin-bottom:10px;
+  color:var(--green2);
+}
+
+.study-topic p{
+  line-height:1.7;
+  color:var(--muted);
+}
+
+.back-btn{
+  margin-top:25px;
+  border:none;
+  background:#dcfce7;
+  color:var(--green2);
+  width:100%;
+  padding:16px;
+  border-radius:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+@media(max-width:700px){
+  .header h1{
+    font-size:38px;
+  }
+
+  .question{
+    font-size:20px;
+  }
+}
 </style>
 </head>
 
@@ -220,468 +291,502 @@ button:hover{
 
 <div class="container">
 
-<div class="screen" id="startScreen">
+  <div class="header">
+    <small>NEW YORK STATE REGENTS</small>
+    <h1>Chemistry Practice</h1>
+    <p>Randomized NYC Chemistry Regents multiple choice practice</p>
+  </div>
 
-<h1>NYC Chemistry Regents Prep</h1>
+  <!-- SETUP -->
+  <div id="setup-screen" class="card">
 
-<p class="subtitle">
-Practice randomized Regents questions and study every major topic
-</p>
+    <div class="section-title">Select Number of Questions</div>
 
-<h2 class="section-title">Choose a Topic</h2>
+    <div class="num-grid">
+      <button class="num-btn selected" onclick="selectNum(5,this)">5</button>
+      <button class="num-btn" onclick="selectNum(10,this)">10</button>
+      <button class="num-btn" onclick="selectNum(15,this)">15</button>
+      <button class="num-btn" onclick="selectNum(20,this)">20</button>
+      <button class="num-btn" onclick="selectNum(25,this)">25</button>
+    </div>
 
-<div class="topics-grid" id="topicsGrid">
+    <div class="section-title">Choose Topics</div>
 
-<div class="topic-card selected" data-topic="all">
-<h3>All Topics</h3>
-<p>Mixed Regents questions</p>
-</div>
+    <div class="topic-grid" id="topic-grid"></div>
 
-<div class="topic-card" data-topic="atoms">
-<h3>Atomic Structure</h3>
-<p>Protons, neutrons, electrons</p>
-</div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
 
-<div class="topic-card" data-topic="bonding">
-<h3>Bonding</h3>
-<p>Ionic and covalent bonds</p>
-</div>
+    <br><br>
 
-<div class="topic-card" data-topic="acids">
-<h3>Acids & Bases</h3>
-<p>pH, acids, bases</p>
-</div>
+    <button class="study-btn" onclick="openStudy()">Study Regents Topics</button>
 
-<div class="topic-card" data-topic="states">
-<h3>States of Matter</h3>
-<p>Phase changes and energy</p>
-</div>
+  </div>
 
-<div class="topic-card" data-topic="organic">
-<h3>Organic Chemistry</h3>
-<p>Hydrocarbons and reactions</p>
-</div>
+  <!-- QUIZ -->
+  <div id="quiz-screen">
 
-<div class="topic-card" data-topic="periodic">
-<h3>Periodic Table</h3>
-<p>Trends and properties</p>
-</div>
+    <div class="quiz-top">
+      <div><strong id="current">1</strong> / <span id="total">10</span></div>
+      <div>Score: <strong id="score">0</strong></div>
+    </div>
 
-</div>
+    <div class="progress">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
 
-<label>Number of Questions</label>
-<input type="number" id="questionAmount" min="1" max="50" value="10">
+    <div class="card">
 
-<br>
+      <div id="topic-label"></div>
 
-<button onclick="startQuiz()">Start Quiz</button>
+      <div class="question" id="question"></div>
 
-<div class="study-section">
+      <div id="choices"></div>
 
-<h2 class="section-title">Study Guide</h2>
+      <div class="feedback" id="feedback">
+        <h3 id="feedback-title"></h3>
+        <p id="feedback-text"></p>
+      </div>
 
-<div class="study-card">
-<h3>Atomic Structure</h3>
-<ul>
-<li>Atomic number = number of protons</li>
-<li>Mass number = protons + neutrons</li>
-<li>Electrons are negative</li>
-<li>Neutrons have no charge</li>
-</ul>
-</div>
+      <br>
 
-<div class="study-card">
-<h3>Bonding</h3>
-<ul>
-<li>Ionic bonds transfer electrons</li>
-<li>Covalent bonds share electrons</li>
-<li>Metals usually form positive ions</li>
-<li>Nonmetals usually form negative ions</li>
-</ul>
-</div>
+      <button class="next-btn" id="next-btn" style="display:none;" onclick="nextQuestion()">Next Question</button>
 
-<div class="study-card">
-<h3>Acids and Bases</h3>
-<ul>
-<li>Acids have pH below 7</li>
-<li>Bases have pH above 7</li>
-<li>Neutral solutions have pH 7</li>
-<li>Litmus indicators change color</li>
-</ul>
-</div>
+    </div>
+  </div>
 
-<div class="study-card">
-<h3>States of Matter</h3>
-<ul>
-<li>Melting and evaporation are endothermic</li>
-<li>Freezing and condensation are exothermic</li>
-<li>Gas particles move fastest</li>
-<li>Solids have fixed shape and volume</li>
-</ul>
-</div>
+  <!-- RESULTS -->
+  <div id="results-screen">
+    <div class="card results">
 
-</div>
+      <h2>Quiz Complete</h2>
 
-</div>
+      <div class="score" id="final-score">0%</div>
 
-<div class="screen hidden" id="quizScreen">
+      <p id="summary"></p>
 
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
+      <br>
 
-<div class="question-number" id="questionNumber"></div>
+      <button class="restart-btn" onclick="restartQuiz()">Try Again</button>
 
-<div class="question" id="questionText"></div>
+    </div>
+  </div>
 
-<div id="optionsContainer"></div>
+  <!-- STUDY -->
+  <div id="study-screen">
+    <div class="card">
 
-<div id="feedbackBox"></div>
+      <h2 style="margin-bottom:25px;">Study Topics</h2>
 
-<br>
+      <div class="study-topic">
+        <h3>Atomic Theory</h3>
+        <p>Study protons, neutrons, electrons, isotopes, atomic number, mass number, electron configuration, and excited states.</p>
+      </div>
 
-<button class="hidden" id="nextBtn" onclick="nextQuestion()">
-Next Question
-</button>
+      <div class="study-topic">
+        <h3>Periodic Table</h3>
+        <p>Learn periodic trends including electronegativity, atomic radius, ionization energy, and valence electrons.</p>
+      </div>
 
-</div>
+      <div class="study-topic">
+        <h3>Bonding</h3>
+        <p>Review ionic, covalent, metallic bonding, polarity, intermolecular forces, and molecular structure.</p>
+      </div>
 
-<div class="screen hidden" id="resultScreen">
+      <div class="study-topic">
+        <h3>Stoichiometry</h3>
+        <p>Practice mole conversions, molar mass calculations, limiting reactants, and balancing equations.</p>
+      </div>
 
-<div class="score" id="scoreText"></div>
+      <div class="study-topic">
+        <h3>Acids & Bases</h3>
+        <p>Learn pH, neutralization reactions, Arrhenius acids/bases, titrations, and indicators.</p>
+      </div>
 
-<button onclick="location.reload()">
-Restart Quiz
-</button>
+      <div class="study-topic">
+        <h3>Redox</h3>
+        <p>Understand oxidation and reduction, oxidation numbers, electrochemistry, and activity series.</p>
+      </div>
 
-</div>
+      <div class="study-topic">
+        <h3>Nuclear Chemistry</h3>
+        <p>Review alpha, beta, gamma decay, half-life calculations, nuclear fission, and fusion.</p>
+      </div>
+
+      <button class="back-btn" onclick="closeStudy()">Back</button>
+
+    </div>
+  </div>
 
 </div>
 
 <script>
 
-const questions = [
+const QUESTIONS = [
 
 {
-topic:"atoms",
-question:"Which particle has a positive charge?",
-options:["Electron","Proton","Neutron","Photon"],
-answer:"Proton",
-explanation:"Protons are positively charged particles found in the nucleus."
-},
-
-{
-topic:"atoms",
-question:"What is the atomic number equal to?",
-options:[
-"Number of protons",
+topic:"Atomic Theory",
+q:"What is the atomic number equal to?",
+choices:[
 "Number of neutrons",
-"Total mass",
-"Energy levels"
+"Number of protons",
+"Number of electrons and neutrons",
+"Mass number"
 ],
-answer:"Number of protons",
-explanation:"The atomic number is always equal to the number of protons."
+correct:1,
+explanation:"Atomic number equals the number of protons in the nucleus. This determines the identity of the element."
 },
 
 {
-topic:"bonding",
-question:"Which bond involves sharing electrons?",
-options:[
-"Ionic",
+topic:"Atomic Theory",
+q:"An atom becomes negatively charged when it:",
+choices:[
+"Loses protons",
+"Gains electrons",
+"Loses neutrons",
+"Gains protons"
+],
+correct:1,
+explanation:"Electrons are negatively charged. Gaining electrons gives the atom an overall negative charge."
+},
+
+{
+topic:"Periodic Table",
+q:"Which element has the highest electronegativity?",
+choices:[
+"Sodium",
+"Oxygen",
+"Fluorine",
+"Neon"
+],
+correct:2,
+explanation:"Fluorine has the highest electronegativity on the periodic table."
+},
+
+{
+topic:"Periodic Table",
+q:"As atomic number increases across a period, atomic radius generally:",
+choices:[
+"Increases",
+"Decreases",
+"Stays the same",
+"Doubles"
+],
+correct:1,
+explanation:"Atomic radius decreases across a period because nuclear charge increases and pulls electrons closer."
+},
+
+{
+topic:"Bonding",
+q:"Which bond forms through the transfer of electrons?",
+choices:[
 "Covalent",
 "Metallic",
+"Ionic",
 "Hydrogen"
 ],
-answer:"Covalent",
-explanation:"Covalent bonds form when atoms share electrons."
+correct:2,
+explanation:"Ionic bonds form when electrons transfer from one atom to another."
 },
 
 {
-topic:"bonding",
-question:"Which type of bond forms between a metal and nonmetal?",
-options:[
-"Covalent",
-"Ionic",
-"Hydrogen",
-"Polar"
+topic:"Bonding",
+q:"Water is a polar molecule because:",
+choices:[
+"It shares electrons equally",
+"It has ionic bonds",
+"It has unequal sharing of electrons",
+"It contains neutrons"
 ],
-answer:"Ionic",
-explanation:"Ionic bonds form through electron transfer between metals and nonmetals."
+correct:2,
+explanation:"Oxygen pulls electrons more strongly than hydrogen, creating unequal charge distribution."
 },
 
 {
-topic:"acids",
-question:"What is the pH of a neutral solution?",
-options:["0","7","10","14"],
-answer:"7",
-explanation:"Neutral solutions have a pH of 7."
-},
-
-{
-topic:"acids",
-question:"Which substance is an acid?",
-options:["NaOH","HCl","NH3","CaO"],
-answer:"HCl",
-explanation:"HCl is hydrochloric acid."
-},
-
-{
-topic:"states",
-question:"Which phase change is endothermic?",
-options:[
-"Freezing",
-"Condensation",
-"Melting",
-"Deposition"
+topic:"Stoichiometry",
+q:"What is the molar mass of H₂O?",
+choices:[
+"18 g/mol",
+"16 g/mol",
+"10 g/mol",
+"20 g/mol"
 ],
-answer:"Melting",
-explanation:"Melting absorbs heat energy."
+correct:0,
+explanation:"H₂O = 2(1) + 16 = 18 g/mol."
 },
 
 {
-topic:"states",
-question:"Which state of matter has a definite shape and volume?",
-options:[
-"Gas",
-"Liquid",
-"Solid",
-"Plasma"
+topic:"Stoichiometry",
+q:"How many moles are in 44 grams of CO₂?",
+choices:[
+"0.5",
+"1",
+"2",
+"44"
 ],
-answer:"Solid",
-explanation:"Solids keep both their shape and volume."
+correct:1,
+explanation:"CO₂ has a molar mass of 44 g/mol, so 44g equals 1 mole."
 },
 
 {
-topic:"organic",
-question:"Which compound is organic?",
-options:["NaCl","CH4","H2O","CO2"],
-answer:"CH4",
-explanation:"Organic compounds contain carbon bonded to hydrogen."
-},
-
-{
-topic:"organic",
-question:"What are the products of hydrocarbon combustion?",
-options:[
-"Hydrogen only",
-"Water only",
-"Carbon dioxide and water",
-"Oxygen and water"
+topic:"Acids & Bases",
+q:"A solution with a pH of 2 is:",
+choices:[
+"Basic",
+"Neutral",
+"Acidic",
+"Alkaline"
 ],
-answer:"Carbon dioxide and water",
-explanation:"Combustion of hydrocarbons forms CO2 and H2O."
+correct:2,
+explanation:"A pH below 7 indicates an acidic solution."
 },
 
 {
-topic:"periodic",
-question:"Which element is a noble gas?",
-options:[
-"Oxygen",
-"Neon",
-"Sodium",
-"Chlorine"
+topic:"Acids & Bases",
+q:"What are the products of a neutralization reaction?",
+choices:[
+"Acid and metal",
+"Salt and water",
+"Water and oxygen",
+"Hydrogen gas"
 ],
-answer:"Neon",
-explanation:"Neon is in Group 18, the noble gases."
+correct:1,
+explanation:"Acid + Base → Salt + Water."
 },
 
 {
-topic:"periodic",
-question:"Which element is most electronegative?",
-options:[
-"Lithium",
-"Calcium",
-"Fluorine",
-"Magnesium"
+topic:"Redox",
+q:"Oxidation is:",
+choices:[
+"Gain of electrons",
+"Loss of electrons",
+"Gain of neutrons",
+"Loss of protons"
 ],
-answer:"Fluorine",
-explanation:"Fluorine is the most electronegative element."
+correct:1,
+explanation:"Oxidation is loss of electrons. Remember: OIL RIG."
+},
+
+{
+topic:"Redox",
+q:"Reduction occurs at the:",
+choices:[
+"Anode",
+"Cathode",
+"Salt bridge",
+"Electrolyte"
+],
+correct:1,
+explanation:"Reduction always occurs at the cathode."
+},
+
+{
+topic:"Nuclear Chemistry",
+q:"Which radiation has no charge?",
+choices:[
+"Alpha",
+"Beta",
+"Gamma",
+"Positron"
+],
+correct:2,
+explanation:"Gamma radiation has no mass and no charge."
+},
+
+{
+topic:"Nuclear Chemistry",
+q:"After one half-life, how much radioactive material remains?",
+choices:[
+"100%",
+"75%",
+"50%",
+"25%"
+],
+correct:2,
+explanation:"One half-life means half of the material remains."
 }
 
 ];
 
+const topics = [...new Set(QUESTIONS.map(q=>q.topic))];
+
+let selectedTopics = new Set(topics);
+let numQuestions = 5;
+let quiz = [];
 let currentQuestion = 0;
 let score = 0;
-let selectedQuestions = [];
-let selectedTopic = "all";
 
-const topicCards = document.querySelectorAll(".topic-card");
+const topicGrid = document.getElementById("topic-grid");
 
-topicCards.forEach(card=>{
+topics.forEach(topic=>{
+  const btn=document.createElement("button");
+  btn.className="topic-chip active";
+  btn.innerText=topic;
 
-card.addEventListener("click",()=>{
+  btn.onclick=()=>{
+    if(selectedTopics.has(topic)){
+      selectedTopics.delete(topic);
+      btn.classList.remove("active");
+    }else{
+      selectedTopics.add(topic);
+      btn.classList.add("active");
+    }
+  }
 
-topicCards.forEach(c=>c.classList.remove("selected"));
-
-card.classList.add("selected");
-
-selectedTopic = card.dataset.topic;
-
+  topicGrid.appendChild(btn);
 });
 
-});
+function selectNum(num,el){
+  numQuestions=num;
 
-function shuffle(array){
+  document.querySelectorAll(".num-btn").forEach(btn=>{
+    btn.classList.remove("selected");
+  });
 
-for(let i=array.length-1;i>0;i--){
-
-const j = Math.floor(Math.random()*(i+1));
-
-[array[i],array[j]] = [array[j],array[i]];
-
-}
-
+  el.classList.add("selected");
 }
 
 function startQuiz(){
 
-const amount = parseInt(document.getElementById("questionAmount").value);
+  const filtered=QUESTIONS.filter(q=>selectedTopics.has(q.topic));
 
-let filteredQuestions;
+  quiz=filtered.sort(()=>Math.random()-0.5).slice(0,numQuestions);
 
-if(selectedTopic==="all"){
+  currentQuestion=0;
+  score=0;
 
-filteredQuestions = [...questions];
+  document.getElementById("setup-screen").style.display="none";
+  document.getElementById("quiz-screen").style.display="block";
 
-}else{
+  document.getElementById("total").innerText=quiz.length;
 
-filteredQuestions = questions.filter(q=>q.topic===selectedTopic);
-
-}
-
-shuffle(filteredQuestions);
-
-selectedQuestions = filteredQuestions.slice(0,amount);
-
-currentQuestion = 0;
-score = 0;
-
-document.getElementById("startScreen").classList.add("hidden");
-document.getElementById("quizScreen").classList.remove("hidden");
-
-loadQuestion();
-
+  loadQuestion();
 }
 
 function loadQuestion(){
 
-document.getElementById("feedbackBox").innerHTML="";
-document.getElementById("nextBtn").classList.add("hidden");
+  document.getElementById("feedback").style.display="none";
+  document.getElementById("next-btn").style.display="none";
 
-const q = selectedQuestions[currentQuestion];
+  const q=quiz[currentQuestion];
 
-document.getElementById("questionNumber").innerHTML =
-`Question ${currentQuestion+1} of ${selectedQuestions.length}`;
+  document.getElementById("current").innerText=currentQuestion+1;
+  document.getElementById("score").innerText=score;
 
-document.getElementById("questionText").innerHTML = q.question;
+  document.getElementById("topic-label").innerHTML=
+  `<strong>${q.topic}</strong>`;
 
-const optionsContainer = document.getElementById("optionsContainer");
+  document.getElementById("question").innerText=q.q;
 
-optionsContainer.innerHTML="";
+  document.getElementById("progress-fill").style.width=
+  ((currentQuestion)/quiz.length)*100+"%";
 
-q.options.forEach(option=>{
+  const choices=document.getElementById("choices");
+  choices.innerHTML="";
 
-const btn = document.createElement("div");
+  q.choices.forEach((choice,index)=>{
 
-btn.classList.add("option");
+    const btn=document.createElement("button");
+    btn.className="choice";
+    btn.innerText=choice;
 
-btn.innerText = option;
+    btn.onclick=()=>answerQuestion(index,btn);
 
-btn.onclick = ()=>checkAnswer(btn,option);
+    choices.appendChild(btn);
 
-optionsContainer.appendChild(btn);
-
-});
-
-const progress = (currentQuestion/selectedQuestions.length)*100;
-
-document.getElementById("progressBar").style.width = progress+"%";
-
+  });
 }
 
-function checkAnswer(btn,selected){
+function answerQuestion(index,btn){
 
-const q = selectedQuestions[currentQuestion];
+  const q=quiz[currentQuestion];
 
-const options = document.querySelectorAll(".option");
+  const allChoices=document.querySelectorAll(".choice");
 
-options.forEach(o=>o.style.pointerEvents="none");
+  allChoices.forEach(c=>c.disabled=true);
 
-const feedbackBox = document.getElementById("feedbackBox");
+  const correctChoice=allChoices[q.correct];
 
-if(selected===q.answer){
+  const feedback=document.getElementById("feedback");
+  const title=document.getElementById("feedback-title");
+  const text=document.getElementById("feedback-text");
 
-score++;
+  if(index===q.correct){
 
-btn.classList.add("correct");
+    score++;
 
-feedbackBox.innerHTML = `
-<div class="feedback correct-feedback">
-✅ Correct!<br><br>
-<strong>Why it is correct:</strong><br>
-${q.explanation}
-</div>
-`;
+    btn.classList.add("correct");
 
-}else{
+    title.innerText="Correct!";
+    text.innerText=
+    q.explanation + " You answered correctly because you applied the chemistry concept properly.";
 
-btn.classList.add("wrong");
+  }else{
 
-options.forEach(o=>{
+    btn.classList.add("wrong");
+    correctChoice.classList.add("correct");
 
-if(o.innerText===q.answer){
+    title.innerText="Incorrect";
+    text.innerText=
+    "Correct Answer: " +
+    q.choices[q.correct] +
+    ". " +
+    q.explanation;
 
-o.classList.add("correct");
+  }
 
-}
+  feedback.style.display="block";
 
-});
-
-feedbackBox.innerHTML = `
-<div class="feedback wrong-feedback">
-❌ Incorrect<br><br>
-
-<strong>Correct Answer:</strong> ${q.answer}<br><br>
-
-<strong>Explanation:</strong><br>
-${q.explanation}
-</div>
-`;
-
-}
-
-document.getElementById("nextBtn").classList.remove("hidden");
-
+  document.getElementById("next-btn").style.display="block";
 }
 
 function nextQuestion(){
 
-currentQuestion++;
+  currentQuestion++;
 
-if(currentQuestion>=selectedQuestions.length){
+  if(currentQuestion>=quiz.length){
 
-showResults();
+    showResults();
 
-}else{
+  }else{
 
-loadQuestion();
+    loadQuestion();
 
-}
-
+  }
 }
 
 function showResults(){
 
-document.getElementById("quizScreen").classList.add("hidden");
+  document.getElementById("quiz-screen").style.display="none";
+  document.getElementById("results-screen").style.display="block";
 
-document.getElementById("resultScreen").classList.remove("hidden");
+  const percent=Math.round((score/quiz.length)*100);
 
-const percent = Math.round((score/selectedQuestions.length)*100);
+  document.getElementById("final-score").innerText=
+  percent + "%";
 
-document.getElementById("scoreText").innerHTML = `
-You got ${score} out of ${selectedQuestions.length} correct!<br><br>
-Final Score: ${percent}%
-`;
+  document.getElementById("summary").innerText=
+  "You got " + score + " out of " + quiz.length + " questions correct.";
+
+}
+
+function restartQuiz(){
+
+  document.getElementById("results-screen").style.display="none";
+  document.getElementById("setup-screen").style.display="block";
+
+}
+
+function openStudy(){
+
+  document.getElementById("setup-screen").style.display="none";
+  document.getElementById("study-screen").style.display="block";
+
+}
+
+function closeStudy(){
+
+  document.getElementById("study-screen").style.display="none";
+  document.getElementById("setup-screen").style.display="block";
 
 }
 
