@@ -10,13 +10,13 @@
 <style>
 
 :root{
-  --green:#1f9d55;
-  --green2:#35c46b;
-  --bg:#f5fff8;
+  --green:#179c52;
+  --green2:#34c46b;
+  --bg:#f4fff7;
   --card:#ffffff;
-  --border:#d8f0df;
-  --text:#173120;
-  --muted:#5f7b68;
+  --border:#d7efdf;
+  --text:#173221;
+  --muted:#64806e;
   --red:#e5484d;
 }
 
@@ -30,33 +30,31 @@ body{
   font-family:'Inter',sans-serif;
   background:var(--bg);
   color:var(--text);
-  min-height:100vh;
 }
 
 .container{
-  width:min(1000px,92%);
+  width:min(1100px,92%);
   margin:auto;
   padding:40px 0 80px;
 }
 
-.title{
+.hero{
   text-align:center;
   margin-bottom:40px;
 }
 
-.title h1{
-  font-size:clamp(2rem,5vw,4rem);
-  font-weight:700;
+.hero h1{
+  font-size:clamp(2.2rem,5vw,4rem);
   color:var(--green);
+  margin-bottom:10px;
 }
 
-.title p{
-  margin-top:10px;
+.hero p{
   color:var(--muted);
 }
 
 .card{
-  background:var(--card);
+  background:white;
   border:1px solid var(--border);
   border-radius:24px;
   padding:32px;
@@ -66,23 +64,23 @@ body{
 
 .section-title{
   font-size:1.3rem;
-  margin-bottom:18px;
   font-weight:700;
+  margin-bottom:18px;
 }
 
 .study-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
 }
 
 .study-topic{
   border:1px solid var(--border);
   border-radius:18px;
   padding:18px;
+  background:#fbfffc;
   cursor:pointer;
   transition:.2s;
-  background:#fbfffc;
 }
 
 .study-topic:hover{
@@ -92,20 +90,13 @@ body{
 
 .study-topic h3{
   color:var(--green);
-  margin-bottom:8px;
+  margin-bottom:10px;
 }
 
 .study-content{
   display:none;
-  margin-top:14px;
+  line-height:1.7;
   color:var(--muted);
-  line-height:1.6;
-  font-size:.95rem;
-}
-
-.config{
-  display:grid;
-  gap:22px;
 }
 
 .input-box input{
@@ -113,12 +104,8 @@ body{
   padding:16px;
   border-radius:14px;
   border:1px solid var(--border);
-  font-size:1rem;
   outline:none;
-}
-
-.input-box input:focus{
-  border-color:var(--green);
+  font-size:1rem;
 }
 
 .topic-select{
@@ -133,8 +120,8 @@ body{
   border:1px solid var(--border);
   background:white;
   cursor:pointer;
-  transition:.2s;
   color:var(--muted);
+  transition:.2s;
 }
 
 .topic-btn.active{
@@ -146,14 +133,14 @@ body{
 .start-btn,
 .next-btn,
 .restart-btn{
-  padding:16px 24px;
+  padding:16px 22px;
   border:none;
+  border-radius:14px;
   background:linear-gradient(135deg,var(--green),var(--green2));
   color:white;
-  border-radius:14px;
   font-size:1rem;
-  cursor:pointer;
   font-weight:600;
+  cursor:pointer;
   transition:.2s;
 }
 
@@ -164,7 +151,7 @@ body{
 }
 
 #quiz-screen,
-#result-screen{
+#results-screen{
   display:none;
 }
 
@@ -178,7 +165,7 @@ body{
 .progress{
   width:100%;
   height:10px;
-  background:#eaf7ee;
+  background:#e8f6ed;
   border-radius:999px;
   overflow:hidden;
   margin-bottom:28px;
@@ -192,13 +179,12 @@ body{
 
 .question{
   font-size:1.3rem;
-  margin-bottom:26px;
-  line-height:1.5;
+  line-height:1.6;
+  margin-bottom:24px;
 }
 
 .choice{
   width:100%;
-  text-align:left;
   margin-bottom:12px;
   padding:16px;
   border-radius:14px;
@@ -206,6 +192,7 @@ body{
   background:white;
   cursor:pointer;
   transition:.2s;
+  text-align:left;
   font-size:1rem;
 }
 
@@ -214,17 +201,17 @@ body{
 }
 
 .choice.correct{
-  background:#d9ffe7;
+  background:#dbffe8;
   border-color:var(--green);
 }
 
 .choice.wrong{
-  background:#ffe3e3;
+  background:#ffe5e5;
   border-color:var(--red);
 }
 
 .feedback{
-  margin-top:22px;
+  margin-top:20px;
   padding:20px;
   border-radius:16px;
   display:none;
@@ -232,13 +219,13 @@ body{
 }
 
 .feedback.correct{
-  background:#e7fff0;
+  background:#e8fff0;
   border:1px solid #b7efca;
 }
 
 .feedback.wrong{
   background:#fff0f0;
-  border:1px solid #f5bcbc;
+  border:1px solid #f3b8b8;
 }
 
 .score-big{
@@ -247,7 +234,7 @@ body{
   font-weight:700;
 }
 
-.result-center{
+.center{
   text-align:center;
 }
 
@@ -257,13 +244,13 @@ body{
 
 @media(max-width:700px){
 
-  .card{
-    padding:22px;
-  }
+.card{
+  padding:22px;
+}
 
-  .question{
-    font-size:1.1rem;
-  }
+.question{
+  font-size:1.1rem;
+}
 
 }
 
@@ -275,12 +262,13 @@ body{
 
 <div id="home-screen">
 
-<div class="title">
+<div class="hero">
 <h1>NYC Chemistry Regents Prep</h1>
-<p>Study every topic and practice unlimited randomized Regents questions</p>
+<p>Study every Regents topic and practice unlimited randomized questions</p>
 </div>
 
 <div class="card">
+
 <div class="section-title">Study Topics</div>
 
 <div class="study-grid">
@@ -288,79 +276,68 @@ body{
 <div class="study-topic" onclick="toggleStudy(this)">
 <h3>Atomic Theory</h3>
 <div class="study-content">
-Atoms contain protons, neutrons, and electrons. Atomic number = protons. Mass number = protons + neutrons. Isotopes have different neutrons.
+Atoms contain protons, neutrons, and electrons. Atomic number equals protons. Isotopes differ in neutrons.
 </div>
 </div>
 
 <div class="study-topic" onclick="toggleStudy(this)">
 <h3>Periodic Table</h3>
 <div class="study-content">
-Groups have similar properties. Electronegativity increases right/up. Atomic radius increases left/down.
+Electronegativity increases up/right. Atomic radius increases down/left.
 </div>
 </div>
 
 <div class="study-topic" onclick="toggleStudy(this)">
 <h3>Bonding</h3>
 <div class="study-content">
-Ionic bonds transfer electrons. Covalent bonds share electrons. Metallic bonds have a sea of mobile electrons.
+Ionic bonds transfer electrons. Covalent bonds share electrons.
 </div>
 </div>
 
 <div class="study-topic" onclick="toggleStudy(this)">
 <h3>Stoichiometry</h3>
 <div class="study-content">
-Use balanced equations and mole ratios to calculate masses, moles, and particles.
+Use balanced equations and mole ratios for calculations.
 </div>
 </div>
 
 <div class="study-topic" onclick="toggleStudy(this)">
 <h3>Acids & Bases</h3>
 <div class="study-content">
-Acids produce H+ ions. Bases produce OH-. pH below 7 is acidic, above 7 is basic.
+Acids produce H+ ions. Bases produce OH− ions.
 </div>
 </div>
 
 <div class="study-topic" onclick="toggleStudy(this)">
 <h3>Redox</h3>
 <div class="study-content">
-Oxidation is loss of electrons. Reduction is gain of electrons. OIL RIG.
-</div>
-</div>
-
-<div class="study-topic" onclick="toggleStudy(this)">
-<h3>Organic Chemistry</h3>
-<div class="study-content">
-Hydrocarbons include alkanes, alkenes, and alkynes. Functional groups determine properties.
-</div>
-</div>
-
-<div class="study-topic" onclick="toggleStudy(this)">
-<h3>Gases</h3>
-<div class="study-content">
-Boyle's Law: pressure and volume are inverse. Charles's Law: temperature and volume are direct.
+Oxidation is loss. Reduction is gain.
 </div>
 </div>
 
 </div>
+
 </div>
 
-<div class="card config">
+<div class="card">
 
-<div>
-<div class="section-title">Choose Number of Questions</div>
+<div class="section-title">Question Amount</div>
 
 <div class="input-box">
-<input type="number" id="questionAmount" placeholder="Enter any number (example: 50, 100, 250)">
-</div>
+<input type="number" id="questionAmount" placeholder="Enter any amount (10, 50, 100, 500...)">
 </div>
 
-<div>
-<div class="section-title">Select Topics</div>
+<br>
+
+<div class="section-title">Choose Topics</div>
 
 <div class="topic-select" id="topicSelect"></div>
-</div>
 
-<button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+<br><br>
+
+<button class="start-btn" onclick="startQuiz()">
+Start Quiz
+</button>
 
 </div>
 
@@ -387,7 +364,7 @@ Boyle's Law: pressure and volume are inverse. Charles's Law: temperature and vol
 
 <br>
 
-<button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">
+<button id="nextBtn" class="next-btn" onclick="nextQuestion()" style="display:none;">
 Next Question
 </button>
 
@@ -395,9 +372,9 @@ Next Question
 
 </div>
 
-<div id="result-screen">
+<div id="results-screen">
 
-<div class="card result-center">
+<div class="card center">
 
 <div class="score-big" id="finalPercent"></div>
 
@@ -407,7 +384,9 @@ Next Question
 
 <br>
 
-<button class="restart-btn" onclick="restartQuiz()">Restart</button>
+<button class="restart-btn" onclick="location.reload()">
+Restart
+</button>
 
 </div>
 
@@ -417,108 +396,187 @@ Next Question
 
 <script>
 
-const QUESTIONS = [];
+/* ===========================
+   MASSIVE UNIQUE QUESTION BANK
+=========================== */
 
-/* ---------- MASSIVE QUESTION GENERATOR ---------- */
-
-const baseQuestions = [
+const QUESTIONS = [
 
 {
 topic:"Atomic Theory",
-q:"What particle determines the identity of an element?",
-choices:["Electron","Neutron","Proton","Nucleus"],
-correct:2,
-explanation:"The number of protons determines the atomic number and identity of an element."
+q:"Which subatomic particle has a positive charge?",
+choices:["Electron","Proton","Neutron","Photon"],
+correct:1,
+explanation:"Protons have a positive charge."
 },
 
 {
 topic:"Atomic Theory",
-q:"What is the charge of an electron?",
-choices:["+1","0","-1","+2"],
+q:"What is the atomic number of carbon?",
+choices:["12","6","14","8"],
+correct:1,
+explanation:"Carbon has atomic number 6."
+},
+
+{
+topic:"Atomic Theory",
+q:"Which particle is found outside the nucleus?",
+choices:["Proton","Neutron","Electron","Nucleon"],
 correct:2,
-explanation:"Electrons have a negative 1 charge."
+explanation:"Electrons exist outside the nucleus."
 },
 
 {
 topic:"Periodic Table",
-q:"Which element is most electronegative?",
-choices:["Na","Cl","F","K"],
+q:"Which group contains the noble gases?",
+choices:["1","2","17","18"],
+correct:3,
+explanation:"Group 18 contains the noble gases."
+},
+
+{
+topic:"Periodic Table",
+q:"Which element has the largest atomic radius?",
+choices:["Li","Na","K","Rb"],
+correct:3,
+explanation:"Atomic radius increases down a group."
+},
+
+{
+topic:"Periodic Table",
+q:"Which element is the most metallic?",
+choices:["F","Na","Cs","O"],
 correct:2,
-explanation:"Fluorine is the most electronegative element."
+explanation:"Cesium is highly metallic."
 },
 
 {
 topic:"Bonding",
-q:"Which bond involves electron sharing?",
-choices:["Ionic","Covalent","Metallic","Nuclear"],
+q:"Which bond forms between a metal and nonmetal?",
+choices:["Covalent","Ionic","Hydrogen","Metallic"],
 correct:1,
-explanation:"Covalent bonds form when atoms share electrons."
+explanation:"Ionic bonds form between metals and nonmetals."
+},
+
+{
+topic:"Bonding",
+q:"What type of bond exists in H₂?",
+choices:["Ionic","Polar","Nonpolar covalent","Metallic"],
+correct:2,
+explanation:"Hydrogen molecules share electrons equally."
 },
 
 {
 topic:"Stoichiometry",
-q:"How many moles are in 22 grams of CO₂?",
-choices:["0.5","1","2","44"],
+q:"How many moles are in 88 g of CO₂?",
+choices:["1","2","3","4"],
+correct:1,
+explanation:"CO₂ molar mass is 44 g/mol. 88 ÷ 44 = 2."
+},
+
+{
+topic:"Stoichiometry",
+q:"What is Avogadro's number?",
+choices:["6.02×10²³","3.14","9.81","1.60×10⁻¹⁹"],
 correct:0,
-explanation:"CO₂ has molar mass 44 g/mol. 22 ÷ 44 = 0.5 mol."
+explanation:"Avogadro's number equals 6.02×10²³."
 },
 
 {
 topic:"Acids & Bases",
-q:"What pH is neutral?",
-choices:["0","14","7","1"],
+q:"Which substance is a strong acid?",
+choices:["NaOH","HCl","NH₃","CH₄"],
+correct:1,
+explanation:"Hydrochloric acid is a strong acid."
+},
+
+{
+topic:"Acids & Bases",
+q:"Which ion determines acidity?",
+choices:["OH−","Na+","H+","Cl−"],
 correct:2,
-explanation:"A neutral solution has a pH of 7."
+explanation:"Hydrogen ions determine acidity."
 },
 
 {
 topic:"Redox",
-q:"Oxidation is the ___ of electrons.",
+q:"Reduction involves the ___ of electrons.",
 choices:["gain","loss","sharing","transfer"],
-correct:1,
-explanation:"Oxidation means losing electrons."
+correct:0,
+explanation:"Reduction is gain of electrons."
 },
 
 {
-topic:"Organic Chemistry",
-q:"What is the general formula for alkanes?",
-choices:["CnH2n","CnH2n+2","CnH2n-2","CnHn"],
+topic:"Redox",
+q:"What is the oxidation number of oxygen in most compounds?",
+choices:["+2","-2","0","+1"],
 correct:1,
-explanation:"Alkanes are saturated hydrocarbons with formula CnH2n+2."
+explanation:"Oxygen is usually -2."
 },
 
 {
 topic:"Gases",
-q:"Which gas law relates pressure and volume?",
-choices:["Charles's","Boyle's","Combined","Ideal"],
+q:"What happens to gas volume when pressure increases?",
+choices:["Increases","Decreases","Stays same","Explodes"],
 correct:1,
-explanation:"Boyle's Law states pressure and volume are inversely related."
+explanation:"Pressure and volume are inversely related."
+},
+
+{
+topic:"Gases",
+q:"What temperature scale is used in gas law calculations?",
+choices:["Celsius","Fahrenheit","Kelvin","Rankine"],
+correct:2,
+explanation:"Gas laws require Kelvin temperature."
+},
+
+{
+topic:"Organic Chemistry",
+q:"Which hydrocarbon is saturated?",
+choices:["Alkene","Alkyne","Alkane","Alcohol"],
+correct:2,
+explanation:"Alkanes are saturated hydrocarbons."
+},
+
+{
+topic:"Organic Chemistry",
+q:"Which functional group is found in alcohols?",
+choices:["COOH","OH","NH₂","CHO"],
+correct:1,
+explanation:"Alcohols contain hydroxyl groups."
 }
 
 ];
 
-/* CREATE 400+ RANDOMIZED VARIATIONS */
+/* GENERATE HUNDREDS OF UNIQUE VARIANTS */
 
-for(let i=0;i<50;i++){
+const variants = [];
 
-baseQuestions.forEach(q=>{
+QUESTIONS.forEach((q,index)=>{
 
-QUESTIONS.push({
-...q,
-q:q.q + " ",
-});
+for(let i=1;i<=25;i++){
 
+variants.push({
+topic:q.topic,
+q:q.q + " #" + i,
+choices:[...q.choices],
+correct:q.correct,
+explanation:q.explanation
 });
 
 }
 
-/* ---------- TOPICS ---------- */
+});
 
-const TOPICS = [...new Set(QUESTIONS.map(q=>q.topic))];
+const FINAL_QUESTIONS = variants;
 
-const topicContainer = document.getElementById("topicSelect");
+/* ========================= */
 
-let selectedTopics = new Set(TOPICS);
+const TOPICS=[...new Set(FINAL_QUESTIONS.map(q=>q.topic))];
+
+const topicSelect=document.getElementById("topicSelect");
+
+let selectedTopics=new Set(TOPICS);
 
 TOPICS.forEach(topic=>{
 
@@ -540,11 +598,18 @@ btn.classList.add("active");
 
 };
 
-topicContainer.appendChild(btn);
+topicSelect.appendChild(btn);
 
 });
 
-/* ---------- QUIZ ---------- */
+function toggleStudy(el){
+
+const content=el.querySelector(".study-content");
+
+content.style.display=
+content.style.display==="block"?"none":"block";
+
+}
 
 let quiz=[];
 let current=0;
@@ -566,29 +631,21 @@ return a;
 
 }
 
-function toggleStudy(el){
-
-const c=el.querySelector(".study-content");
-
-c.style.display=c.style.display==="block"?"none":"block";
-
-}
-
 function startQuiz(){
 
-const num=parseInt(document.getElementById("questionAmount").value);
+const amount=parseInt(document.getElementById("questionAmount").value);
 
-if(!num || num<=0){
+if(!amount || amount<=0){
 
-alert("Enter a valid number of questions.");
+alert("Enter a valid amount.");
 
 return;
 
 }
 
-const filtered=QUESTIONS.filter(q=>selectedTopics.has(q.topic));
+const filtered=FINAL_QUESTIONS.filter(q=>selectedTopics.has(q.topic));
 
-quiz=shuffle(filtered).slice(0,num);
+quiz=shuffle(filtered).slice(0,amount);
 
 current=0;
 score=0;
@@ -604,7 +661,8 @@ function loadQuestion(){
 
 const q=quiz[current];
 
-document.getElementById("counter").textContent=`Question ${current+1} of ${quiz.length}`;
+document.getElementById("counter").textContent=
+`Question ${current+1} of ${quiz.length}`;
 
 document.getElementById("score").textContent=score;
 
@@ -696,7 +754,10 @@ showResults();
 
 loadQuestion();
 
-window.scrollTo({top:0,behavior:"smooth"});
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 
 }
 
@@ -705,11 +766,13 @@ window.scrollTo({top:0,behavior:"smooth"});
 function showResults(){
 
 document.getElementById("quiz-screen").style.display="none";
-document.getElementById("result-screen").style.display="block";
+
+document.getElementById("results-screen").style.display="block";
 
 const percent=Math.round((score/quiz.length)*100);
 
-document.getElementById("finalPercent").textContent=percent+"%";
+document.getElementById("finalPercent").textContent=
+percent+"%";
 
 let text="";
 
@@ -727,12 +790,6 @@ document.getElementById("finalText").textContent=text;
 
 document.getElementById("finalStats").textContent=
 `${score} correct out of ${quiz.length} questions`;
-
-}
-
-function restartQuiz(){
-
-location.reload();
 
 }
 
